@@ -3,7 +3,7 @@
 </template>
 <script>
 export default {
-    name: 'sample',
+    name: 'Node',
     props: [],
 
     components: {

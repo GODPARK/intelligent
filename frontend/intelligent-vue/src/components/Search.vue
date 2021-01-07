@@ -1,9 +1,9 @@
 <template>
-    
+    <p> search </p>
 </template>
 <script>
 export default {
-    name: 'sample',
+    name: 'search-bar',
     props: [],
 
     components: {
@@ -23,7 +23,8 @@ export default {
     },
 
     methods: {
+
     },
-  
+
 };
 </script>
