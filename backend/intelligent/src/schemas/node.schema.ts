@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { LinkDto } from '../dto/link.dto'
-import { UrlDto } from '../dto/url.dto'
 
 export type NodeDocument = Node & Document;
 
@@ -21,8 +20,20 @@ export class Node {
     @Prop([LinkDto])
     link: LinkDto[]
 
-    @Prop([UrlDto])
-    url: UrlDto[]
+    @Prop()
+    create: Date
+    
+    @Prop()
+    update: Date
+
+    @Prop()
+    delete: Date
+
+    @Prop()
+    state: number
+
+    @Prop()
+    color: string
 }
 
-export const NodeSchme = SchemaFactory.createForClass(Node)
+export const NodeSchema = SchemaFactory.createForClass(Node)

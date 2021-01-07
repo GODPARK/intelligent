@@ -1,11 +1,16 @@
 import { from } from "rxjs";
 import { LinkDto } from './link.dto'
-import { UrlDto } from './url.dto'
 
 export class NodeDto {
+    _id: string;
     name: string;
     info: string;
     category: string;
-    detail: Array<UrlDto>;
+    detail: string;
     link: Array<LinkDto>;
+    create: Date;
+    update: Date;
+    delete: Date;
+    state: number;
+    color: string;
 }
