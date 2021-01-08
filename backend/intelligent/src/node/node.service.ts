@@ -36,26 +36,28 @@ export class NodeService {
     }
 
     async findAllByCategory(name: string): Promise<Node[]> {
-        const resultList = this.nodeModel.find({ category: name}).exec()
+        const nameDecord = decodeURI(decodeURIComponent(name))
+        const resultList = this.nodeModel.find({ category: nameDecord}).exec()
         if(!resultList || (await resultList).length == 0) {
-            throw new NotFoundException(`not found node by category: ${name}`)
+            throw new NotFoundException(`not found node by category: ${nameDecord}`)
         }
         return resultList
     }
 
     async findAllByKeyword(keyword: string): Promise<Node[]> {
+        const keywordDecord = decodeURI(decodeURIComponent(keyword))
         const resultList = this.nodeModel.find(
             { 
                 $or:[
-                    { name: { $regex: `.*${keyword}.*`}},
-                    { info: {$regex: `.*${keyword}.*`}},
-                    { category: {$regex: `.*${keyword}.*`}}
+                    { name: { $regex: `.*${keywordDecord}.*`}},
+                    { info: {$regex: `.*${keywordDecord}.*`}},
+                    { category: {$regex: `.*${keywordDecord}.*`}}
                 ]
             }
         ).exec()
         
         if (!resultList || (await resultList).length == 0) {
-            throw new NotFoundException(`not found node by keyword: ${keyword}`)
+            throw new NotFoundException(`not found node by keyword: ${keywordDecord}`)
         }
         return resultList
     }

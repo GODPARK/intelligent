@@ -11,7 +11,7 @@ const Search = {
         async getSearchKeywordApi(context, param) {
             return axios({
                 method: 'GET',
-                url: `${process.env.VUE_APP_BACKEND_IP}/api/node/search/${param}`,
+                url: `${process.env.VUE_APP_BACKEND_IP}/api/node/search/${encodeURI(encodeURIComponent(param))}`,
                 headers: {
                     'Content-Type': 'application/json; charset=UTF-8',
                 },
