@@ -1,9 +1,9 @@
 <template>
-    <p> node </p>
+    <p> node create </p>
 </template>
 <script>
 export default {
-    name: 'Node',
+    name: 'create',
     props: [],
 
     components: {

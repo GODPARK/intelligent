@@ -1,26 +1,28 @@
 <template>
   <div>
     <p> home </p>
-    <search-bar></search-bar>
+    <p> {{ compSearchResultList }} </p>
   </div>
 </template>
 
 <script>
-import SearchBar from '../components/Search.vue';
 
 export default {
   name: 'Home',
     props: [],
 
     components: {
-      SearchBar,
     },
 
     mounted() {
 
     },
 
-    computed: {},
+    computed: {
+      compSearchResultList() {
+        return this.$store.getters['view/search/getSearchResultList'];
+      },
+    },
 
     data() {
         return {

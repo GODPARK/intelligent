@@ -3,10 +3,18 @@
 const Search = {
     namespaced: true,
     state: {
+        searchResultList: [],
     },
     getters: {
+        getSearchResultList(state) {
+            return state.searchResultList;
+        },
     },
-    mutations: {},
+    mutations: {
+        setSearchResultList(state, list) {
+            state.searchResultList = list;
+        },
+    },
     actions: {},
     modules: {},
 };
