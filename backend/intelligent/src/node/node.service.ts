@@ -28,11 +28,36 @@ export class NodeService {
     }
 
     async findAll(): Promise<Node[]> {
-        return this.nodeModel.find().exec()
+        const resultList = this.nodeModel.find().exec()
+        if(!resultList || (await resultList).length == 0) {
+            throw new NotFoundException(`not found node in database`)
+        }
+        return resultList
     }
 
     async findAllByCategory(name: string): Promise<Node[]> {
-        return this.nodeModel.find({ category: name}).exec()
+        const resultList = this.nodeModel.find({ category: name}).exec()
+        if(!resultList || (await resultList).length == 0) {
+            throw new NotFoundException(`not found node by category: ${name}`)
+        }
+        return resultList
+    }
+
+    async findAllByKeyword(keyword: string): Promise<Node[]> {
+        const resultList = this.nodeModel.find(
+            { 
+                $or:[
+                    { name: { $regex: `.*${keyword}.*`}},
+                    { info: {$regex: `.*${keyword}.*`}},
+                    { category: {$regex: `.*${keyword}.*`}}
+                ]
+            }
+        ).exec()
+        
+        if (!resultList || (await resultList).length == 0) {
+            throw new NotFoundException(`not found node by keyword: ${keyword}`)
+        }
+        return resultList
     }
 
     async createNode(nodeDto: NodeDto): Promise<Node> {
@@ -43,6 +68,7 @@ export class NodeService {
         nodeDto.info = nodeDto.info.toLowerCase()
         nodeDto.category = nodeDto.category.toLowerCase()
         nodeDto.detail = nodeDto.detail.toLowerCase()
+        nodeDto.link = []
 
         if (!nodeDto.name) {
             throw new BadRequestException(`node name is empty`)
@@ -56,11 +82,11 @@ export class NodeService {
         return createdNode.save()
     }
 
-    async updateNode(id: string, nodeDto: NodeDto): Promise<Node> {
+    async updateNode(nodeDto: NodeDto): Promise<Node> {
         
         const updateDto: any = {}
 
-        if(!id) {
+        if(!nodeDto._id) {
             throw new BadRequestException(`id is empty`)
         }
         
@@ -68,11 +94,10 @@ export class NodeService {
         if (nodeDto.info) updateDto.info = nodeDto.info
         if (nodeDto.detail) updateDto.detail = nodeDto.detail
         if (nodeDto.category) updateDto.category = nodeDto.category
-        if (nodeDto.link) updateDto.link = nodeDto.link
         if (nodeDto.color) updateDto.color = nodeDto.color
         updateDto.update = new Date()
 
-        const resultNode = await this.nodeModel.findByIdAndUpdate(id, updateDto, {new: true}).exec()
+        const resultNode = await this.nodeModel.findByIdAndUpdate(nodeDto._id, updateDto, {new: true}).exec()
         return resultNode
     }
 

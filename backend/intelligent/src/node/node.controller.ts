@@ -2,6 +2,7 @@ import { BadRequestException, Body, Controller, Delete, Get, HttpStatus, Param, 
 import { NodeService } from './node.service';
 import { NodeDto } from '../dto/node.dto';
 import { Node } from '../schemas/node.schema'
+import { ConnectDto, IdDto } from 'src/dto/request.dto';
 
 @Controller('/api/node')
 export class NodeController {
@@ -13,10 +14,15 @@ export class NodeController {
     }
 
     @Get()
-    getNodeByBody(@Body() idDto: { id: string }): Promise<Node> {
+    getNodeByBody(@Body() idDto: IdDto): Promise<Node> {
         return this.nodeService.findOne(idDto.id)
     }
-
+    
+    @Get('/search/:keyword')
+    getNodeByKeyword(@Param('keyword') keyword: string ): Promise<Node[]> {
+        return this.nodeService.findAllByKeyword(keyword)
+    }
+    
     @Get('/:id')
     getNodeByParam(@Param('id') id: string ): Promise<Node> {
         return this.nodeService.findOne(id)
@@ -33,22 +39,22 @@ export class NodeController {
     }
 
     @Patch('/link')
-    connectNode(@Body() link: { sid: string, tid: string}): Promise<Node[]> {
-        return this.nodeService.connectLink(link.sid, link.tid)
+    connectNode(@Body() connectDto: ConnectDto): Promise<Node[]> {
+        return this.nodeService.connectLink(connectDto.sid, connectDto.tid)
     }
 
     @Patch('/unlink')
-    disConnectNode(@Body() link: { sid: string, tid: string}): Promise<Node[]> {
-        return this.nodeService.disConnectLink(link.sid, link.tid)
+    disConnectNode(@Body() connectDto: ConnectDto): Promise<Node[]> {
+        return this.nodeService.disConnectLink(connectDto.sid, connectDto.tid)
     }
 
     @Patch()
-    updateNode(@Body() updateDto: { id: string, node: NodeDto }): Promise<Node> {
-        return this.nodeService.updateNode(updateDto.id, updateDto.node)
+    updateNode(@Body() nodeDto: NodeDto): Promise<Node> {
+        return this.nodeService.updateNode(nodeDto)
     }
 
     @Delete()
-    deleteNode(@Body() deleteDto: { id: string }): Promise<Node> {
+    deleteNode(@Body() deleteDto: IdDto): Promise<Node> {
         return this.nodeService.deleteNode(deleteDto.id)
     }
 }
