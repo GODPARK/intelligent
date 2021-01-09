@@ -1,4 +1,6 @@
 import Search from './search';
+import Node from './node';
+import Home from './home';
 
 const View = {
     namespaced: true,
@@ -8,6 +10,8 @@ const View = {
     },
     modules: {
         search: Search,
+        node: Node,
+        home: Home,
     },
 };
 

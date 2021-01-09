@@ -2,10 +2,10 @@
     <v-text-field
         class="mx-4"
         v-model="searchText"
+        placeholder="Search"
         solo
         dense
         clearable
-        :dark="darkMode"
         single-line
         append-icon="fa-search"
         @keydown.enter="searchCall()"
@@ -13,7 +13,7 @@
 </template>
 <script>
 export default {
-    name: 'search-bar',
+    name: 'search-comp',
     props: [],
 
     components: {
@@ -26,7 +26,7 @@ export default {
 
     computed: {
         darkMode() {
-            return this.$store.getters.getDarkMode;
+            return !this.$store.getters.getDarkMode;
         },
     },
 
@@ -37,10 +37,6 @@ export default {
     },
 
     methods: {
-        goSearch() {
-            this.$router.push({ path: 'search', query: { value: this.searchText } });
-        },
-
         searchCall() {
             if (this.searchText) {
                 this.$store.dispatch('api/search/getSearchKeywordApi', this.searchText).then(
