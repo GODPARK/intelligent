@@ -34,6 +34,9 @@ export class Node {
 
     @Prop()
     color: string
+
+    @Prop()
+    star: number
 }
 
 export const NodeSchema = SchemaFactory.createForClass(Node)

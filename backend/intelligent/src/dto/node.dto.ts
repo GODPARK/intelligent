@@ -24,6 +24,7 @@ export class NodeDto {
     update: Date;
     delete: Date;
     state: number;
+    star: number;
     @ApiProperty({
         description: 'node color',
     })

@@ -65,6 +65,7 @@ export class NodeService {
     async createNode(nodeDto: NodeDto): Promise<Node> {
         nodeDto.create = new Date()
         nodeDto.state = 1
+        nodeDto.star = 0
 
         nodeDto.name = nodeDto.name.toLowerCase()
         nodeDto.info = nodeDto.info.toLowerCase()
