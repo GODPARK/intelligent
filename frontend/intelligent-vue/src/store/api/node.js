@@ -27,7 +27,7 @@ const Node = {
             );
         },
 
-        async getNodeParamApi(param) {
+        async getNodeParamApi(context, param) {
             return axios({
                 method: 'GET',
                 url: `${process.env.VUE_APP_BACKEND_IP}/api/node/${param}`,
@@ -46,7 +46,7 @@ const Node = {
             );
         },
 
-        async getNodeBodyApi(body) {
+        async getNodeBodyApi(context, body) {
             return axios({
                 method: 'GET',
                 url: `${process.env.VUE_APP_BACKEND_IP}/api/node`,
@@ -66,7 +66,7 @@ const Node = {
             );
         },
 
-        async postNodeBodyApi(body) {
+        async postNodeBodyApi(context, body) {
             return axios({
                 method: 'POST',
                 url: `${process.env.VUE_APP_BACKEND_IP}/api/node`,
@@ -86,7 +86,7 @@ const Node = {
             );
         },
 
-        async patchNodeBodyApi(body) {
+        async patchNodeBodyApi(context, body) {
             return axios({
                 method: 'PATCH',
                 url: `${process.env.VUE_APP_BACKEND_IP}/api/node`,
@@ -106,7 +106,7 @@ const Node = {
             );
         },
 
-        async deleteNodeBodyApi(body) {
+        async deleteNodeBodyApi(context, body) {
             return axios({
                 method: 'DELETE',
                 url: `${process.env.VUE_APP_BACKEND_IP}/api/node`,

@@ -1,36 +1,32 @@
 <template>
     <div>
-        <v-card
+        <v-toolbar
             dense
-            elevation="2"
-            color="teal lighten-3"
+            elevation="4"
             outlined
             :dark="darkMode"
         >
-            <v-card-title>
-                <div  @click="goHome()">
-                    <v-icon class="mr-2" >fa-book</v-icon>
-                    Intelligent
-                </div>
-                <v-spacer></v-spacer>
-                <v-btn text small @click="goNodeCreate()">
-                    <v-icon small class="mr-1">fa-plus</v-icon>
-                    NEW
-                </v-btn>
-            </v-card-title>
-            <search-bar></search-bar>
-        </v-card>
+            <v-toolbar-title>
+                <v-icon class="mr-2" >fa-book</v-icon>
+                Intelligent
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn
+                @click="changeDarkMode()"
+                small
+            >
+                dark
+            </v-btn>
+        </v-toolbar>
     </div>
 </template>
 <script>
-import SearchBar from '../components/Search.vue';
 
 export default {
     name: 'header-layout',
     props: [],
 
     components: {
-        SearchBar,
     },
 
     mounted() {
@@ -45,16 +41,13 @@ export default {
 
     data() {
         return {
-
+            showSearchBar: false,
         };
     },
 
     methods: {
-        goHome() {
-            this.$router.replace('/');
-        },
-        goNodeCreate() {
-            this.$router.replace('/node/create');
+        changeDarkMode() {
+            this.$store.commit('changeDarkMode');
         },
     },
 

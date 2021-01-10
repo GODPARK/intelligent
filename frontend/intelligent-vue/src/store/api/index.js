@@ -9,7 +9,7 @@ const Api = {
     actions: {
     },
     modules: {
-        api: Node,
+        node: Node,
         search: Search,
         link: Connect,
     },

@@ -18,6 +18,9 @@ export default new Vuex.Store({
     setDarkMode(state, value) {
       state.darkMode = value;
     },
+    changeDarkMode(state) {
+      state.darkMode = !state.darkMode;
+    },
   },
   actions: {
   },

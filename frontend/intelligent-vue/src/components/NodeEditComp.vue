@@ -1,9 +1,9 @@
 <template>
-    <p> node create </p>
+    
 </template>
 <script>
 export default {
-    name: 'create',
+    name: 'node-edit-comp',
     props: [],
 
     components: {
