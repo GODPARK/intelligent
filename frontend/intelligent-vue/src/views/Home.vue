@@ -1,39 +1,50 @@
 <template>
   <div>
-    <v-card class="mr-1 mb-3 mt-3 ml-1" outlined shaped elevation="3">
-      <v-card-title>
-        Search
-      </v-card-title>
-      <search-view></search-view>
-    </v-card>
-    <v-card class="mr-1 mb-3 mt-3 ml-1" outlined shaped elevation="3">
-      <v-card-actions>
-        <v-btn text> func1 </v-btn>
-        <v-btn text> func2 </v-btn>
-        <v-btn text> func3 </v-btn>
-        <v-btn text> func4 </v-btn>
-      </v-card-actions>
-      <v-divider></v-divider>
-      <node-view></node-view>
-    </v-card>
+    <v-toolbar
+      dense
+      floating
+    >
+      <node-create-comp></node-create-comp>
+      <search-comp @search="openSearchResultView"></search-comp>
+    </v-toolbar>
+    <node-view></node-view>
+    <v-navigation-drawer
+      v-model="searchResultView"
+      right
+      absolute
+      temporary
+    >
+      <search-result-view></search-result-view>
+    </v-navigation-drawer>
   </div>
 </template>
 
 <script>
-import SearchView from './SearchView.vue';
 import NodeView from './NodeView.vue';
+import SearchResultView from './SearchResultView.vue';
+import SearchComp from '../components/SearchComp.vue';
+import NodeCreateComp from '../components/NodeCreateCom.vue';
 
 export default {
   name: 'Home',
     props: [],
 
     components: {
-      SearchView,
       NodeView,
+      SearchResultView,
+      SearchComp,
+      NodeCreateComp,
     },
 
     mounted() {
 
+    },
+
+    watch: {
+      compShowSearchResultView(last) {
+        console.log(last);
+        this.searchResultView = last;
+      },
     },
 
     computed: {
@@ -41,11 +52,14 @@ export default {
 
     data() {
         return {
-
+          searchResultView: false,
         };
     },
 
     methods: {
+      openSearchResultView() {
+        this.searchResultView = true;
+      },
     },
 };
 </script>

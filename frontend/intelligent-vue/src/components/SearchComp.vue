@@ -1,15 +1,17 @@
 <template>
-    <v-text-field
-        class="mx-4"
-        v-model="searchText"
-        placeholder="Search"
-        solo
-        dense
-        clearable
-        single-line
-        append-icon="fa-search"
-        @keydown.enter="searchCall()"
-    ></v-text-field>
+    <div>
+        <v-text-field
+            class="mx-4 mt-3"
+            v-model="searchText"
+            placeholder="Search"
+            dense
+            clearable
+            single-line
+            hid-details
+            append-icon="fa-search"
+            @keydown.enter="searchCall()"
+        ></v-text-field>
+    </div>
 </template>
 <script>
 export default {
@@ -41,8 +43,8 @@ export default {
             if (this.searchText) {
                 this.$store.dispatch('api/search/getSearchKeywordApi', this.searchText).then(
                     (response) => {
-                        console.log(response);
                         this.$store.commit('view/search/setSearchResultList', response);
+                        this.$emit('search');
                     },
                 );
             }

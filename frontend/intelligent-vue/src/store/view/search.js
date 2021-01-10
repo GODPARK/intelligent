@@ -2,6 +2,7 @@ const Search = {
     namespaced: true,
     state: {
         searchResultList: [],
+        showSearchResultView: false,
     },
     getters: {
         getSearchResultList(state) {
@@ -11,6 +12,9 @@ const Search = {
     mutations: {
         setSearchResultList(state, list) {
             state.searchResultList = list;
+        },
+        clearSearchResultList(state) {
+            state.searchResultList = [];
         },
     },
     actions: {},
