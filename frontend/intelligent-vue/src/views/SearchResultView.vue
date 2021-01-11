@@ -1,6 +1,9 @@
 <template>
-    <div v-if="compSearchResultList.length > 0">
-        <v-list>
+    <div >
+        <v-alert type="error" v-if="compSearchResultList.length === 0">
+            Not Found
+        </v-alert>
+        <v-list v-if="compSearchResultList.length > 0">
             <v-list-item>
                 <v-btn small text
                     @click="clickClearSearchResult()"
@@ -43,7 +46,11 @@ export default {
 
     computed: {
         compSearchResultList() {
-            return this.$store.getters['view/search/getSearchResultList'];
+            const list = this.$store.getters['view/search/getSearchResultList'];
+            if (list) {
+                return list;
+            }
+            return [];
         },
     },
 

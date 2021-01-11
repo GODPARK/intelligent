@@ -8,7 +8,7 @@ const Connect = {
     },
     mutations: {},
     actions: {
-        async patchLinkApi(body) {
+        async patchLinkApi(context, body) {
             return axios({
                 method: 'PATCH',
                 url: `${process.env.VUE_APP_BACKEND_IP}/api/node/link`,
@@ -28,7 +28,7 @@ const Connect = {
             );
         },
 
-        async patchUnLinkApi(body) {
+        async patchUnLinkApi(context, body) {
             return axios({
                 method: 'PATCH',
                 url: `${process.env.VUE_APP_BACKEND_IP}/api/node/unlink`,

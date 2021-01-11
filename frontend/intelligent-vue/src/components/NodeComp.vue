@@ -10,9 +10,17 @@
                 :color="compNodeColor"
                 dense
             >
-                <v-toolbar-title>
-                    <strong>{{ node.name }}</strong>
-                </v-toolbar-title>
+                <v-tooltip right>
+                    <template v-slot:activator="{ on, attrs }">
+                    <v-toolbar-title
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                        <strong>{{ node.name }}</strong>
+                    </v-toolbar-title>
+                    </template>
+                    <span>{{ node._id }}</span>
+                </v-tooltip>
                 <v-spacer>
                 </v-spacer>
                 <v-btn text small
@@ -66,6 +74,7 @@
                                     v-for="item in node.link" :key="item.link_id"
                                     :color="item.link_color"
                                     class="mr-1 ml-1 mb-1"
+                                    @click="clickLinkNode(item)"
                                 >
                                     <strong>{{ item.link_name }}</strong>
                                 </v-btn>
@@ -94,96 +103,36 @@
                     size="15"
                 ></v-rating>
                 <v-spacer></v-spacer>
-                <v-btn text small>
-                    JSON
-                </v-btn>
-                <v-btn text x-small>
+                <v-btn text x-small @click="refreshNode(node)">
                     <v-icon small>fa-refresh</v-icon>
                 </v-btn>
-                <v-btn text x-small>
+                <v-btn text x-small @click="openEditDialog()">
                     <v-icon small>fa-edit</v-icon>
                 </v-btn>
-                <v-btn text x-small>
+                <v-btn text x-small @click="deleteNode(node)">
                     <v-icon small>fa-trash</v-icon>
                 </v-btn>
             </v-card-actions>
         </v-card>
-        <v-dialog
-            v-model="showOverNode"
-            max-width="500px"
-        >
-            <v-card>
-                <v-card-title>
-                    Search Category:
-                    <v-btn class="ml-1"> {{searchCategory}} </v-btn>
-                </v-card-title>
-                <v-data-table
-                    dense
-                    :headers="searchCategoryHeader"
-                    :items="searchCategoryNodeList"
-                    item-key="_id"
-                    class="elevation-1 mr-2 ml-2 mt-2 mb-2"
-                >
-                    <template v-slot:[`item.state`]="{ item }">
-                        <v-btn x-small @click="addNodeInView(item)"> show </v-btn>
-                    </template>
-                </v-data-table>
-                <v-card-actions>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
-        <v-dialog
-         v-model="showLinkDialog"
-         max-width="500px"
-        >
-            <v-card>
-                <v-toolbar dense>
-                    <v-toolbar-title>
-                        <strong> {{ node.name }} </strong>
-                    </v-toolbar-title>
-                </v-toolbar>
-                <v-card-text>
-                    <v-text-field
-                        v-model="searchLinkText"
-                        placeholder="Search Node"
-                        @keydown.enter="searchCall()"
-                    >
-                    </v-text-field>
-                    <v-data-table
-                        dense
-                        :headers="searchLinkHeader"
-                        :items="searchLinkNodeList"
-                        item-key="_id"
-                    >
-                        <template v-slot:[`item.state`]="{ item }">
-                            <v-btn x-small v-if="item.alink === 0">
-                                <v-icon x-small class="mr-1">
-                                    fa-link
-                                </v-icon>
-                                link
-                            </v-btn>
-                            <v-btn x-small v-if="item.alink === 1"
-                                color="teal lighten-4"
-                            >
-                                <v-icon x-small class="mr-1">
-                                    fa-unlink
-                                </v-icon>
-                                unlink
-                            </v-btn>
-                        </template>
-                    </v-data-table>
-                </v-card-text>
-            </v-card>
-        </v-dialog>
+        <node-edit-dialog :node="node" ref="edit"></node-edit-dialog>
+        <node-category-dialog :node="node" ref="category"></node-category-dialog>
+        <node-link-dialog :node="node" ref="link"></node-link-dialog>
     </div>
 </template>
 <script>
+/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
+import NodeLinkDialog from './node/LinkDialog.vue';
+import NodeCategoryDialog from './node/CategoryDialog.vue';
+import NodeEditDialog from './NodeEditComp.vue';
+
 export default {
     name: 'node-comp',
     props: ['node', 'customElevation'],
 
     components: {
-
+        NodeLinkDialog,
+        NodeCategoryDialog,
+        NodeEditDialog,
     },
 
     mounted() {
@@ -201,38 +150,6 @@ export default {
 
     data() {
         return {
-            showOverNode: false,
-            searchCategory: '',
-            searchCategoryNodeList: [],
-            searchCategoryHeader: [
-                { text: 'show', value: 'state' },
-                {
-                    text: 'node',
-                    align: 'start',
-                    sortable: true,
-                    value: 'name',
-                },
-                { text: 'category', value: 'category' },
-                { text: 'detail', value: 'detail' },
-            ],
-            showLinkDialog: false,
-            searchLinkText: '',
-            searchLinkNodeList: [],
-            searchLinkHeader: [
-                { text: 'link', value: 'state' },
-                {
-                    text: 'node',
-                    value: 'name',
-                    align: 'start',
-                    sortable: true,
-                },
-                {
-                    text: 'category',
-                    value: 'category',
-                    align: 'start',
-                    sortable: true,
-                },
-            ],
         };
     },
 
@@ -240,53 +157,42 @@ export default {
         closeNode(viewId) {
             this.$store.commit('view/node/closeNodeView', viewId);
         },
-        openCategoryDialog(category) {
-            this.searchCategory = '';
-            this.searchCategoryNodeList = [];
-            this.$store.dispatch('api/search/getSearchCategoryApi', category).then(
-                (response) => {
-                    this.searchCategoryNodeList = response;
-                    this.searchCategory = category;
-                    this.showOverNode = true;
-                },
-            );
-        },
-        closeCategoryDialog() {
-            this.showOverNode = false;
-        },
         openLinkDialog() {
-            this.searchLinkNodeList = [];
-            this.searchLinkText = '';
-            this.node.link.forEach((element) => {
-                const alreadyNode = {
-                    id: element.link_id,
-                    name: element.link_name,
-                    category: element.link_category,
-                    state: 1,
-                    alink: 1,
+            this.$refs.link.openLinkDialog();
+        },
+        openCategoryDialog() {
+            this.$refs.category.openCategoryDialog();
+        },
+        openEditDialog() {
+            this.$refs.edit.openShowNodeCreateDialog();
+        },
+        deleteNode(node) {
+            // eslint-disable-next-line
+            if (confirm(`Are you suer delete Node: ${node.name}`)) {
+                const body = {
+                    id: node._id,
                 };
-                this.searchLinkNodeList.push(alreadyNode);
-            });
-            this.showLinkDialog = true;
-        },
-        closeLinkDialog() {
-            this.showLinkDialog = false;
-        },
-        addNodeInView(node) {
-            this.$store.commit('view/node/addSelectedNodeList', node);
-        },
-        searchCall() {
-            if (this.searchLinkText) {
-                this.$store.dispatch('api/search/getSearchKeywordApi', this.searchLinkText).then(
-                    (response) => {
-                        response.forEach((element) => {
-                            const linkTargetNode = element;
-                            linkTargetNode.alink = 0;
-                            this.searchLinkNodeList.push(linkTargetNode);
-                        });
+                this.$store.dispatch('api/node/deleteNodeBodyApi', body).then(
+                    () => {
+                        this.$store.commit('view/node/closeNodeView', node.viewId);
                     },
                 );
             }
+        },
+        refreshNode(node) {
+            this.$store.dispatch('api/node/getNodeParamApi', node._id).then(
+                (response) => {
+                    this.$store.commit('view/node/updateSelectedNode', response);
+                },
+            );
+        },
+        clickLinkNode(linkNode) {
+            console.log(linkNode);
+            this.$store.dispatch('api/node/getNodeParamApi', linkNode.link_id).then(
+                (response) => {
+                    this.$store.commit('view/node/updateSelectedNode', response);
+                },
+            );
         },
     },
 

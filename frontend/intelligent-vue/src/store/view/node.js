@@ -1,3 +1,4 @@
+/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
 const Node = {
     namespaced: true,
     state: {
@@ -18,14 +19,47 @@ const Node = {
             state.selectedNodeList = list;
         },
         addSelectedNodeList(state, value) {
-            console.log(state.selectedNodeList);
-            console.log(state.selectedNodeindexMap);
-            /* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
             if (!state.selectedNodeindexMap.has(value._id)) {
                 const saveData = value;
                 saveData.viewId = state.viewNodeId;
                 state.selectedNodeList.push(saveData);
                 state.selectedNodeindexMap.set(saveData._id, state.viewNodeId);
+                state.viewNodeId += 1;
+            }
+        },
+        async updateSelectedNode(state, node) {
+            if (node.viewId) {
+                const deleteIdx = await state.selectedNodeList.findIndex(
+                    (x) => x.viewId === node.viewId,
+                );
+                if (deleteIdx > -1) {
+                    await state.selectedNodeList.splice(deleteIdx, 1);
+                    const saveData = node;
+                    saveData.viewId = state.viewNodeId;
+                    state.selectedNodeindexMap.set(node._id, saveData.viewId);
+                    state.viewNodeId += 1;
+                    await state.selectedNodeList.push(saveData);
+                    state.selectedNodeindexMap[saveData._id] = saveData.viewId;
+                }
+            } else if (state.selectedNodeindexMap.has(node._id)) {
+                const viewId = await state.selectedNodeindexMap.get(node._id);
+                const deleteIdx = await state.selectedNodeList.findIndex(
+                    (x) => x.viewId === viewId,
+                );
+                if (deleteIdx > -1) {
+                    await state.selectedNodeList.splice(deleteIdx, 1);
+                    const saveData = node;
+                    saveData.viewId = state.viewNodeId;
+                    state.selectedNodeindexMap.set(node._id, saveData.viewId);
+                    state.viewNodeId += 1;
+                    await state.selectedNodeList.push(saveData);
+                }
+            } else {
+                console.log('add');
+                const saveData = node;
+                saveData.viewId = state.viewNodeId;
+                await state.selectedNodeList.push(saveData);
+                await state.selectedNodeindexMap.set(saveData._id, state.viewNodeId);
                 state.viewNodeId += 1;
             }
         },

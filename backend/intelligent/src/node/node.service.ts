@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { NodeDto } from '../dto/node.dto';
 import { Node, NodeDocument } from '../schemas/node.schema'
 import { LinkDto } from 'src/dto/link.dto';
+import { on } from 'process';
 
 @Injectable()
 export class NodeService {
@@ -37,7 +38,14 @@ export class NodeService {
 
     async findAllByCategory(name: string): Promise<Node[]> {
         const nameDecord = decodeURI(decodeURIComponent(name))
-        const resultList = this.nodeModel.find({ category: nameDecord}).exec()
+        const resultList = this.nodeModel.find(
+            {
+                $and: [
+                    { state: 1 },
+                    { category: nameDecord}
+                ],
+            }
+        ).exec()
         if(!resultList || (await resultList).length == 0) {
             throw new NotFoundException(`not found node by category: ${nameDecord}`)
         }
@@ -52,7 +60,8 @@ export class NodeService {
                     { name: { $regex: `.*${keywordDecord}.*`}},
                     { info: {$regex: `.*${keywordDecord}.*`}},
                     { category: {$regex: `.*${keywordDecord}.*`}}
-                ]
+                ],
+                $and: [ { state: 1 } ],
             }
         ).exec()
         
@@ -171,6 +180,13 @@ export class NodeService {
         deleteDto.delete = new Date()
         deleteDto.state = 0
         const deleteNode = await await this.nodeModel.findByIdAndUpdate(id, deleteDto, {new: true}).exec()
+        deleteNode.link.forEach(async (oneLink: LinkDto) => {
+            const tnode = await this.nodeModel.findById({ _id: oneLink.link_id }).exec()
+            var tindex = tnode.link.findIndex(link_value => link_value.link_id == id);
+            if (tindex > -1) tnode.link.splice(tindex, 1)
+            await this.nodeModel.findByIdAndUpdate(tnode.id, tnode, {new: true}).exec();
+        });
+
         return deleteNode
     }
 }
