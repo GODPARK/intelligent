@@ -7,7 +7,7 @@
             :dark="darkMode"
         >
             <v-toolbar-title>
-                <v-icon class="mr-2" >fa-book</v-icon>
+                <v-icon class="mr-2" >fa-cubes</v-icon>
                 Intelligent
             </v-toolbar-title>
             <v-spacer></v-spacer>

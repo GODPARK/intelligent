@@ -27,6 +27,16 @@ const Node = {
                 state.viewNodeId += 1;
             }
         },
+        closeOtherNode(state, node) {
+            state.selectedNodeList = [];
+            state.selectedNodeindexMap.clear();
+            state.viewNodeId = 0;
+            const saveData = node;
+            saveData.viewId = state.viewNodeId;
+            state.selectedNodeList.push(saveData);
+            state.selectedNodeindexMap.set(saveData._id, state.viewNodeId);
+            state.viewNodeId += 1;
+        },
         async updateSelectedNode(state, node) {
             if (node.viewId) {
                 const deleteIdx = await state.selectedNodeList.findIndex(
@@ -76,6 +86,30 @@ const Node = {
                 state.selectedNodeList[deleteIdx]._id,
             );
             state.selectedNodeList.splice(deleteIdx, 1);
+        },
+        sortByViewId(state) {
+            state.selectedNodeList.sort((a, b) => b.viewId - a.viewId);
+        },
+        sortByColor(state) {
+            state.selectedNodeList.sort((a, b) => {
+                if (a.color < b.color) return 1;
+                if (a.color > b.color) return -1;
+                return 0;
+            });
+        },
+        sortByCategory(state) {
+            state.selectedNodeList.sort((a, b) => {
+                if (a.category < b.category) return 1;
+                if (a.category > b.category) return -1;
+                return 0;
+            });
+        },
+        sortByName(state) {
+            state.selectedNodeList.sort((a, b) => {
+                if (a.name < b.name) return 1;
+                if (a.name > b.name) return -1;
+                return 0;
+            });
         },
     },
     actions: {

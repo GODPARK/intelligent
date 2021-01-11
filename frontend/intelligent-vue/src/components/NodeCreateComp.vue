@@ -1,6 +1,7 @@
 <template>
     <div>
         <v-btn
+            :dark="darkMode"
             @click="openShowNodeCreateDialog()"
         >
             NEW
@@ -116,7 +117,11 @@ export default {
 
     },
 
-    computed: {},
+    computed: {
+        darkMode() {
+            return this.$store.getters.getDarkMode;
+        },
+    },
 
     data() {
         return {

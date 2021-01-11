@@ -46,7 +46,7 @@
                                 x-small
                                 @click="openCategoryDialog(node.category)"
                             >
-                                {{ node.category }}
+                                <strong>{{ node.category }}</strong>
                             </v-btn>
                         </v-list-item-content>
                         <v-list-item-content class="mr-1 ml-1 mb-1">
@@ -56,7 +56,7 @@
                             <v-btn x-small
                                 color="blue-grey lighten-5"
                             >
-                                {{node.detail}}
+                                <strong>{{node.detail}}</strong>
                             </v-btn>
                         </v-list-item-content>
                     </v-list-item>
@@ -103,6 +103,9 @@
                     size="15"
                 ></v-rating>
                 <v-spacer></v-spacer>
+                <v-btn text x-small @click="closeOtherNode(node)">
+                    <v-icon small>fa-eject</v-icon>
+                </v-btn>
                 <v-btn text x-small @click="refreshNode(node)">
                     <v-icon small>fa-refresh</v-icon>
                 </v-btn>
@@ -185,6 +188,9 @@ export default {
                     this.$store.commit('view/node/updateSelectedNode', response);
                 },
             );
+        },
+        closeOtherNode(node) {
+            this.$store.commit('view/node/closeOtherNode', node);
         },
         clickLinkNode(linkNode) {
             console.log(linkNode);

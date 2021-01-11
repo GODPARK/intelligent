@@ -5,10 +5,10 @@
             class="mr-1 mb-3 mt-3 ml-1" outlined elevation="3"
         >
             <v-card-actions>
-                <v-btn text small> func1 </v-btn>
-                <v-btn text small> func2 </v-btn>
-                <v-btn text small> func3 </v-btn>
-                <v-btn text small> func4 </v-btn>
+                <v-btn text small @click="sortNodeList('viewId')"> INVERSE </v-btn>
+                <v-btn text small @click="sortNodeList('name')"> NAME </v-btn>
+                <v-btn text small @click="sortNodeList('category')"> CATEGORY </v-btn>
+                <v-btn text small @click="sortNodeList('color')"> COLOR </v-btn>
                 <v-spacer></v-spacer>
                 <v-btn text small @click="clickCloseNodeList()">
                 <v-icon small>fa-close</v-icon>
@@ -68,6 +68,17 @@ export default {
     methods: {
         clickCloseNodeList() {
             this.$store.commit('view/node/clearSelectedNodeList');
+        },
+        sortNodeList(type) {
+            if (type === 'viewId') {
+                this.$store.commit('view/node/sortByViewId');
+            } else if (type === 'color') {
+                this.$store.commit('view/node/sortByColor');
+            } else if (type === 'category') {
+                this.$store.commit('view/node/sortByCategory');
+            } else if (type === 'name') {
+                this.$store.commit('view/node/sortByName');
+            }
         },
     },
 

@@ -144,6 +144,7 @@ export default {
         },
         saveEditNode() {
             this.editNodeObject._id = this.node._id;
+            this.editNodeObject.color = this.colorSelected;
             if (this.editNodeObject._id) {
                 this.$store.dispatch('api/node/patchNodeBodyApi', this.editNodeObject).then(
                     (response) => {

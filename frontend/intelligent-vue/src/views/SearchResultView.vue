@@ -6,6 +6,7 @@
         <v-list v-if="compSearchResultList.length > 0">
             <v-list-item>
                 <v-btn small text
+                    block
                     @click="clickClearSearchResult()"
                 >
                     clear
@@ -16,7 +17,9 @@
             >
                 <v-btn
                     small
+                    block
                     class="mr-1 ml-1 mb-1 mt-1"
+                    color="blue-grey darken-3"
                     @click="clickSearchResult(node)"
                 >
                     <v-chip
@@ -25,7 +28,7 @@
                     >
                         {{ node.category }}
                     </v-chip>
-                    <strong>{{ node.name }}</strong>
+                    <strong style="color:white">{{ node.name }}</strong>
                 </v-btn>
             </v-list-item>
         </v-list>

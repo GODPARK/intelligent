@@ -23,7 +23,7 @@
 import NodeView from './NodeView.vue';
 import SearchResultView from './SearchResultView.vue';
 import SearchComp from '../components/SearchComp.vue';
-import NodeCreateComp from '../components/NodeCreateCom.vue';
+import NodeCreateComp from '../components/NodeCreateComp.vue';
 
 export default {
   name: 'Home',

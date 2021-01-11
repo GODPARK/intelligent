@@ -110,6 +110,13 @@ export class NodeService {
         updateDto.update = new Date()
 
         const resultNode = await this.nodeModel.findByIdAndUpdate(nodeDto._id, updateDto, {new: true}).exec()
+        resultNode.link.forEach(async (oneLink: LinkDto) => {
+            const tnode = await this.nodeModel.findById({ _id: oneLink.link_id }).exec()
+            var tindex = tnode.link.findIndex(link_value => link_value.link_id == nodeDto._id);
+            if (tindex > -1) tnode.link[tindex].link_color = resultNode.color;
+            await this.nodeModel.findByIdAndUpdate(tnode.id, tnode, {new: true}).exec();
+        });
+        
         return resultNode
     }
 

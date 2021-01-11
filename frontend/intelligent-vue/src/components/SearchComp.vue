@@ -10,6 +10,7 @@
             hid-details
             append-icon="fa-search"
             @keydown.enter="searchCall()"
+            color="blue-grey darken-3"
         ></v-text-field>
     </div>
 </template>
