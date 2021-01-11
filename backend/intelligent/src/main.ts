@@ -14,6 +14,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api/doc', app, document);
   app.enableCors();
-  await app.listen(80);
+  await app.listen(3000);
 }
 bootstrap();
