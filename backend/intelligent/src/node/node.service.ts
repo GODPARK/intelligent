@@ -59,7 +59,7 @@ export class NodeService {
             { 
                 $or:[
                     { name: { $regex: `.*${keywordDecord}.*`}},
-                    { info: {$regex: `.*${keywordDecord}.*`}},
+                    { detail: {$regex: `.*${keywordDecord}.*`}},
                     { category: {$regex: `.*${keywordDecord}.*`}}
                 ],
                 $and: [ { state: 1 } ],
