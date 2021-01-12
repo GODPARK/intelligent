@@ -65,7 +65,6 @@ const Node = {
                     await state.selectedNodeList.push(saveData);
                 }
             } else {
-                console.log('add');
                 const saveData = node;
                 saveData.viewId = state.viewNodeId;
                 await state.selectedNodeList.push(saveData);

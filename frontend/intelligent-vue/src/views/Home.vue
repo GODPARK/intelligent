@@ -8,14 +8,7 @@
       <search-comp @search="openSearchResultView"></search-comp>
     </v-toolbar>
     <node-view></node-view>
-    <v-navigation-drawer
-      v-model="searchResultView"
-      right
-      absolute
-      temporary
-    >
-      <search-result-view></search-result-view>
-    </v-navigation-drawer>
+    <search-result-view ref="result"></search-result-view>
   </div>
 </template>
 
@@ -40,25 +33,17 @@ export default {
 
     },
 
-    watch: {
-      compShowSearchResultView(last) {
-        console.log(last);
-        this.searchResultView = last;
-      },
-    },
-
     computed: {
     },
 
     data() {
         return {
-          searchResultView: false,
         };
     },
 
     methods: {
       openSearchResultView() {
-        this.searchResultView = true;
+        this.$refs.result.openSearchResultDialog();
       },
     },
 };

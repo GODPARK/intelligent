@@ -133,7 +133,6 @@ export default {
             };
             this.$store.dispatch('api/link/patchLinkApi', body).then(
                 (response) => {
-                    console.log(response);
                     response.forEach((element) => {
                         this.$store.commit('view/node/updateSelectedNode', element);
                         const idx = this.searchLinkNodeList.findIndex(
@@ -151,7 +150,6 @@ export default {
             };
             this.$store.dispatch('api/link/patchUnLinkApi', body).then(
                 (response) => {
-                    console.log(response);
                     response.forEach((element) => {
                         this.$store.commit('view/node/updateSelectedNode', element);
                         const idx = this.searchLinkNodeList.findIndex(
