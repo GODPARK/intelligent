@@ -106,6 +106,26 @@ const Node = {
             );
         },
 
+        async patchNodeStarBodyApi(context, body) {
+            return axios({
+                method: 'PATCH',
+                url: `${process.env.VUE_APP_BACKEND_IP}/api/node/star`,
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                },
+                data: body,
+            }).then(
+                (response) => response.data,
+                (error) => {
+                  console.log(error);
+                },
+              ).catch(
+                (message) => {
+                  console.log(message);
+                },
+            );
+        },
+
         async deleteNodeBodyApi(context, body) {
             return axios({
                 method: 'DELETE',

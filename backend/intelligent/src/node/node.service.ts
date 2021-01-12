@@ -5,6 +5,7 @@ import { NodeDto } from '../dto/node.dto';
 import { Node, NodeDocument } from '../schemas/node.schema'
 import { LinkDto } from 'src/dto/link.dto';
 import { on } from 'process';
+import { StarDto } from 'src/dto/request.dto';
 
 @Injectable()
 export class NodeService {
@@ -118,6 +119,23 @@ export class NodeService {
         });
         
         return resultNode
+    }
+
+    async updateNodeStar(starDto: StarDto): Promise<Node> {
+        if(!starDto.id) {
+            throw new BadRequestException('id is empty');
+        }
+        if(!starDto.star) {
+            throw new BadRequestException('star is empty');
+        }
+        if(starDto.star < 0) {
+            starDto.star = 0;
+        }
+        else if (starDto.star > 5) {
+            starDto.star = 5;
+        }
+        const resultNode = await this.nodeModel.findByIdAndUpdate(starDto.id, { star: starDto.star }, {new: true}).exec()
+        return resultNode;
     }
 
     async connectLink(sid: string, tid: string): Promise<Node[]> {

@@ -17,3 +17,14 @@ export class ConnectDto {
     })
     tid: string;
 }
+
+export class StarDto {
+    @ApiProperty({
+        description: 'this is node id'
+    })
+    id: string;
+    @ApiProperty({
+        description: 'this is star below < 5'
+    })
+    star: number;
+}

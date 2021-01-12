@@ -2,7 +2,7 @@ import { BadRequestException, Body, Controller, Delete, Get, HttpStatus, Param, 
 import { NodeService } from './node.service';
 import { NodeDto } from '../dto/node.dto';
 import { Node } from '../schemas/node.schema'
-import { ConnectDto, IdDto } from 'src/dto/request.dto';
+import { ConnectDto, IdDto, StarDto } from 'src/dto/request.dto';
 
 @Controller('/api/node')
 export class NodeController {
@@ -51,6 +51,11 @@ export class NodeController {
     @Patch()
     updateNode(@Body() nodeDto: NodeDto): Promise<Node> {
         return this.nodeService.updateNode(nodeDto)
+    }
+    
+    @Patch('/star')
+    updateStarNode(@Body() starDto: StarDto): Promise<Node> {
+        return this.nodeService.updateNodeStar(starDto)
     }
 
     @Delete()

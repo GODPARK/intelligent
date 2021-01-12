@@ -95,12 +95,14 @@
             </v-card>
             <v-card-actions>
                 <v-rating
+                    v-model="nodeStar"
                     class="ml-2"
                     background-color="grey"
                     color="yellow accent-4"
                     dense
                     hover
                     size="15"
+                    @input="changeStar"
                 ></v-rating>
                 <v-spacer></v-spacer>
                 <v-btn text x-small @click="closeOtherNode(node)">
@@ -139,7 +141,11 @@ export default {
     },
 
     mounted() {
-
+        if (this.node.star) {
+            this.nodeStar = this.node.star;
+        } else {
+            this.nodeStar = 0;
+        }
     },
 
     computed: {
@@ -153,6 +159,7 @@ export default {
 
     data() {
         return {
+            nodeStar: 0,
         };
     },
 
@@ -193,10 +200,19 @@ export default {
             this.$store.commit('view/node/closeOtherNode', node);
         },
         clickLinkNode(linkNode) {
-            console.log(linkNode);
             this.$store.dispatch('api/node/getNodeParamApi', linkNode.link_id).then(
                 (response) => {
                     this.$store.commit('view/node/updateSelectedNode', response);
+                },
+            );
+        },
+        changeStar(star) {
+            const body = {};
+            body.id = this.node._id;
+            body.star = star;
+            this.$store.dispatch('api/node/patchNodeStarBodyApi', body).then(
+                (response) => {
+                    this.nodeStar = response.star;
                 },
             );
         },
