@@ -86,7 +86,7 @@
                             <v-list-item-title>
                                 Info
                             </v-list-item-title>
-                            <div class="text-body-2">
+                            <div class="text-body-2" style="white-space:pre-line;">
                                 {{ node.info }}
                             </div>
                         </v-list-item-content>
